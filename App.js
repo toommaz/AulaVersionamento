@@ -6,7 +6,7 @@ export default function App() {
    <View style={css.container}>
      <Text style={css.textos}>O Melhor Motorola do mundo!</Text>
      <Text style={css.textos}> Ai liguei a lanterna</Text>
-     <Image style={css.imagem} source={require('./MinhasImagens/Celular.jpg')}/>
+     <Image style={css.imagem} source={require('')}/>
    </View>
 
   );
