@@ -1,22 +1,37 @@
-name: CI_Teste_Codigo
+name: Teste de Push
 
 on:
-  push:                
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  test:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Publicar arquivos estaticos
+        uses: actions/upload-pages-artifact@v3
         with:
-          node-version: '20'
+          path: .          
 
-      - name: Instalar dependencias
-        run: npm ci
-
-      - name: Executar testes
-        run: npm test
+      - name: Fazer deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
