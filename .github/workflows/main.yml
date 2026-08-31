@@ -1,0 +1,45 @@
+name: CI - Validação do Site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validar-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      # Passo com id definido, para podermos consultar o resultado depois
+      - name: Validar HTML
+        id: validar_html
+        run: npm test
+
+      - name: Notificar status do commit
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sucesso = '${{ steps.validar_html.outcome }}' === 'success';
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: sucesso ? 'success' : 'failure',
+              context: 'CI / Validação do Site',
+              description: sucesso
+                ? 'HTML válido - código não quebrado'
+                : 'Falha na validação - verifique os logs'
+            });
