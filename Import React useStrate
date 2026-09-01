@@ -1,0 +1,16 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native'
+
+export default function App() {
+  const [nome, setNome] = useState('');
+  return (
+
+   <View style={css.container}>
+      <Text style={css.titulo}>Olá{nome ? ', ' + nome : ''}!</Text>
+      <Text style={css.textos}>Bem vindo(a) ao seu primeiro APP!</Text>
+      <TextInput style={css.entrada} placeholder="Digite seu nome"        
+      value={nome} onChangeText={setNome}/>
+      <Text style={css.textos}>aqui suas ideias valem mais</Text>      
+   </View>
+  );
+}
